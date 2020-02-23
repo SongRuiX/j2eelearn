@@ -1,0 +1,57 @@
+<html> 
+	<head>
+	<title>动态下拉列表</title>
+    <meta http-equiv="content-type" content="text/html; charset=gb2312">
+     </head>
+<script language="javascript">
+var xmlHttp; //定义一个变量用于存放XMLHttpRequest对象
+
+function createXMLHttpRequest() {//创建一个XMLHttpRequest对象
+	 if (window.ActiveXObject) 
+	   xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+	 else if (window.XMLHttpRequest) 
+	   xmlHttp = new XMLHttpRequest();
+}
+//这是响应省份列表的onChange事件的处理方法
+function updateSelect(){
+     var selected = document.all.slt1.value;//得到省份列表的当前选值
+     createXMLHttpRequest();//创建一个XMLHttpRequest对象
+     xmlHttp.onreadystatechange = processor; //将状态触发器绑定到一个函数
+     //通过GET方法向指定的URL建立服务器的调用
+     xmlHttp.open("GET", "CreXML?selected="+selected);
+     xmlHttp.send(null); //发送请求
+}
+function processor () {//处理从服务器返回的XML文档并更新地市下拉列表 
+    var result; //定义一个变量用于存放从服务器返回的响应结果
+     if(xmlHttp.readyState == 4) { //如果响应完成
+       if(xmlHttp.status == 200) {//如果返回成功
+          //取出服务器返回的XML文档的所有city标签的子节点
+	   result = xmlHttp.responseXML.getElementsByTagName("city");
+          while (document.all.slt2.options.length>0){//先清除地市列表的现有内容
+	      document.all.slt2.removeChild(document.all.slt2.childNodes[0]);
+           for(var i=0;i<result.length;i++){//解析XML中的数据并更新地市列表
+	      var option = document.createElement("OPTION");
+	      //取出<cityname>中的值
+	      option.text = result[i].childNodes[0].childNodes[0].nodeValue;	
+              //取出<cityvalue>中的值
+	      option.value = result[i].childNodes[1].childNodes[0].nodeValue; 
+	      document.all.slt2.options.add(option);//为地市列表中添加选项
+	   } 	   
+	 } 
+	 }
+	 }
+	 }
+</script>  
+<body>
+      请选择省份：
+      <select id="slt1" onChange="updateSelect()">
+        <option value="1">湖南省</option>
+        <option value="2">广东省</option>
+      </select>
+    	地市：
+      <select id="slt2">
+    	  <option value="">请选择地市</option>
+      </select>
+    </form>
+  </body>
+</html> 

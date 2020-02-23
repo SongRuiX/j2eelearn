@@ -1,0 +1,138 @@
+<html>
+  <head>
+    <title>调用Yahoo的搜索Web Service实现搜索</title>
+    <meta http-equiv="content-type" content="text/html; charset=gb2312">
+  </head>
+	<style type="text/css">
+	<!--
+		.titleCss {
+			font-family: "黑体";
+			font-size: 14px;
+			color: #006699;
+		}
+		.linkCss {
+			font-family: "宋体", System;
+			font-size: 12px;
+			color: #009900;
+		}
+		.contextCss {
+			font-family: "宋体", System;
+			font-size: 12px;
+			color: #000000;
+		}
+	-->
+	</style> 
+	<script language="javascript">
+		//定义一个变量用于存放XMLHttpRequest对象
+		var xmlHttp; 
+		//定义一个变量用于存放从服务器返回的响应结果
+		var result;	
+			
+		//该函数用于创建一个XMLHttpRequest对象
+		function createXMLHttpRequest() {
+			if (window.ActiveXObject) {
+				xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+			} 
+			else if (window.XMLHttpRequest) {
+				xmlHttp = new XMLHttpRequest();
+			}
+		}
+			
+		//这是一个通过AJAX调用Web service进行搜索的方法
+		function search(){
+			if (document.all.query.value ==""){
+				alert("对不起，请您先输入查询关键字!");
+				return;
+			}
+			//取出用户填写的查询关键字和记录数
+			queryContext = document.all.query.value;
+			resultTempSize =document.all.resultSize.value;
+			//打开搜索等待图标
+			document.all.wait.style.display = "inline";
+			//创建一个XMLHttpRequest对象
+			createXMLHttpRequest();
+			//将状态触发器绑定到一个函数
+			xmlHttp.onreadystatechange = processor;
+			//这里建立对服务器YahooSearch的调用
+			xmlHttp.open("GET", "YahooSearch?query="+queryContext+"&results="+resultTempSize);
+			//发送请求
+			xmlHttp.send(null);
+		}
+		
+		//处理从服务器返回的XML文档
+		function processor() {
+			if(xmlHttp.readyState == 4) { //如果响应完成
+				if(xmlHttp.status == 200) {//如果返回成功
+					//关闭等待图标的显示
+					document.all.wait.style.display = "none";
+					//取出服务器返回的XML文档的所有Result标签的子节点
+					result = xmlHttp.responseXML.getElementsByTagName("Result");
+					//调用处理函数
+					parseResult();
+				}else{
+					document.all.wait.style.display = "none";
+					alert("对不起，搜索失败!");
+				}
+			}
+		}
+		
+		//将返回的查询结果表示出来
+		function parseResult(){
+			var table = document.getElementById("resultList");
+			//清除原有的内容
+			while (table.childNodes.length>0){
+				table.removeChild(table.childNodes[0]);
+			}
+			for (var i=0;i<result.length;i++){
+				//新增一行用于显示标题
+				tr = table.insertRow(-1);
+				cell = tr.insertCell(-1);
+				tr.height = 25;
+				tr.className = "titleCss";
+				link = document.createElement("a");
+				link.setAttribute("href",result[i].childNodes[3].firstChild.nodeValue);
+				link.setAttribute("target","_blank");
+				link.appendChild(document.createTextNode(result[i].childNodes[0].firstChild.nodeValue));
+				cell.appendChild(link);
+				
+				//新增一行用于显示内容
+				tr = table.insertRow(-1);
+				cell = tr.insertCell(-1);
+				tr.height = 20;
+				tr.className = "contextCss";
+				cell.innerHTML = result[i].childNodes[1].firstChild.nodeValue;
+				
+				//新增一行用于显示url
+				tr = table.insertRow(-1);
+				cell = tr.insertCell(-1);
+				tr.height = 20;
+				tr.className = "linkCss";
+				cell.innerHTML = result[i].childNodes[2].firstChild.nodeValue;
+				
+				//新增一空行用作间隔
+				tr = table.insertRow(-1);
+				cell = tr.insertCell(-1);
+				cell.innerHTML = "&nbsp;";
+			}
+		}
+	</script>
+  <body bgcolor="#ffffee">
+    <h2>调用Yahoo的搜索Web Service实现搜索</h2><br>
+    请输入关键字：
+    <input id="query" type="text">
+    记录数：
+    <select id="resultSize">
+    	<option value=10>10</option>
+    	<option value=20>20</option>
+    	<option value=30>30</option>
+    	<option value=40>40</option>
+    </select>
+    <input type="button" value="搜索" onClick="search()">
+    <span id="wait" style="display:none;">
+    	<img src="images/loading.gif">
+    </span>
+    <hr>
+    <h2>搜索结果：</h2>
+    <table id="resultList" border="0" width="800"></table>
+  </body>
+</html>

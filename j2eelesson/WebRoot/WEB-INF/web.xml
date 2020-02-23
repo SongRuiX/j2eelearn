@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>loginServlet</servlet-name>
+    <servlet-class>l4.loginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>loginServlet</servlet-name>
+    <url-pattern>/loginServlet</url-pattern>
+  </servlet-mapping>
+    <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>RegisterServlet</servlet-name>
+    <servlet-class>l4.RegisterServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
+    <url-pattern>/RegisterServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>CheckUser</servlet-name>
+    <servlet-class>l11.CheckUser</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CreXML</servlet-name>
+    <servlet-class>l11.CreXML</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UpdateCounter</servlet-name>
+    <servlet-class>l11.UpdateCounter</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>GetPhoto</servlet-name>
+    <servlet-class>l11.GetPhoto</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>YahooSearch</servlet-name>
+    <servlet-class>l11.YahooSearch</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CreateTip</servlet-name>
+    <servlet-class>l11.CreateTip</servlet-class>
+  </servlet>
+    <servlet>
+    <servlet-name>Check</servlet-name>
+    <servlet-class>l12.Check</servlet-class>
+  </servlet>
+ <servlet>
+    <servlet-name>UploadServlet</servlet-name>
+    <servlet-class>l10.UploadServlet</servlet-class>
+  </servlet>
+ <servlet>
+    <servlet-name>Photo</servlet-name>
+    <servlet-class>l13.Photo</servlet-class>
+  </servlet>
+ <servlet>
+    <servlet-name>ShoppingServlet</servlet-name>
+    <servlet-class>l15.ShoppingServlet</servlet-class>
+  </servlet>
+
+
+  <servlet-mapping>
+    <servlet-name>CheckUser</servlet-name>
+    <url-pattern>/11AJAX/CheckUser</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CreXML</servlet-name>
+    <url-pattern>/11AJAX/CreXML</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateCounter</servlet-name>
+    <url-pattern>/11AJAX/UpdateCounter</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetPhoto</servlet-name>
+    <url-pattern>/11AJAX/GetPhoto</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>YahooSearch</servlet-name>
+    <url-pattern>/11AJAX/YahooSearch</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CreateTip</servlet-name>
+    <url-pattern>/11AJAX/CreateTip</url-pattern>
+  </servlet-mapping>
+   <servlet-mapping>
+    <servlet-name>Check</servlet-name>
+    <url-pattern>/12CheckUser/Check</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UploadServlet</servlet-name>
+    <url-pattern>/10load/UploadServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Photo</servlet-name>
+    <url-pattern>/13Album/Photo</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ShoppingServlet</servlet-name>
+    <url-pattern>/15Book/ShoppingServlet</url-pattern>
+  </servlet-mapping>
+</web-app>

@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <title>刷新页面的局部内容</title>
+    <meta http-equiv="content-type" content="text/html; charset=gb2312">
+  </head>
+<script language="javascript">
+	//定义一个变量用于存放XMLHttpRequest对象
+	var xmlHttp; 
+	
+	//该函数用于创建一个XMLHttpRequest对象
+	function createXMLHttpRequest() {
+		if (window.ActiveXObject) {
+			xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+		} 
+		else if (window.XMLHttpRequest) {
+			xmlHttp = new XMLHttpRequest();
+		}
+	}
+		
+	//这是一个通过AJAX刷新统计图的方法
+	function autoFlush(){
+		//创建一个日期变量和一个时间变量
+		var tempTime = new Date();
+		var tempParameter = tempTime.getTime();
+		//创建一个XMLHttpRequest对象
+		createXMLHttpRequest();
+		//将状态触发器绑定到一个函数
+		xmlHttp.onreadystatechange = processor;
+		//这里放置一个时间型参数是为了让服务器知道这是一个新的请求
+		xmlHttp.open("GET", "UpdateCounter?rnd="+tempParameter);
+		//发送请求
+		xmlHttp.send(null);
+	}
+	
+	//处理从服务器返回的XML文档
+	function processor() {
+		//定义一个变量用于存放从服务器返回的响应结果
+		var result;
+		if(xmlHttp.readyState == 4) { //如果响应完成
+			if(xmlHttp.status == 200) {//如果返回成功
+				//取出服务器返回的XML文档的所有counter标签的子节点
+				result = xmlHttp.responseXML.getElementsByTagName("counter");
+				//解析XML中的数据并更新统计图状态
+				for(var i=0;i<result.length;i++){
+					//用相应的统计数据更新统计图片的状态
+					document.getElementById("bar"+i).height = result[i].childNodes[0].nodeValue;
+				}
+			}
+		}
+	}
+	//每隔一秒就执行一次autoFlush方法
+	setInterval("autoFlush();",1000);
+</script>
+  <body>
+<TABLE border="0" bgcolor="#c0c0c0" width="360px">
+	<TR>
+		<TD colspan="6" align="center"><h2>指标动态统计图</h2></TD>
+	</TR>
+	<TR height="100" align="center" valign="bottom">
+		<TD><img id="bar0" src="images/bar0.gif" width="20"></TD>
+		<TD><img id="bar1" src="images/bar1.gif" width="20"></TD>
+		<TD><img id="bar2" src="images/bar2.gif" width="20"></TD>
+		<TD><img id="bar3" src="images/bar3.gif" width="20"></TD>
+		<TD><img id="bar4" src="images/bar4.gif" width="20"></TD>
+		<TD><img id="bar5" src="images/bar5.gif" width="20"></TD>
+	</TR>
+	<TR height="20" align="center">
+		<TD>指标一</TD>
+		<TD>指标二</TD>
+		<TD>指标三</TD>
+		<TD>指标四</TD>
+		<TD>指标五</TD>
+		<TD>指标六</TD>
+	</TR>
+</TABLE>
+
+</body>
+</html>

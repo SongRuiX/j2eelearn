@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<linkmans>
+    <linkman>
+        <name>张三</name>
+        <id>001</id>
+        <company>A公司</company>
+        <email>zhang@aaa.com</email>
+        <tel>(020)12345678</tel>
+        <address>广东省广州市</address>
+    </linkman>
+
+    <linkman>
+        <name>李四</name>
+        <id>002</id>
+        <company>B公司</company>
+        <email>li@bbb.com</email>
+        <tel>(010)12345678</tel>
+        <address>北京市</address>
+    </linkman>
+</linkmans>

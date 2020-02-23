@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <title>注册用户惟一性检查</title>
+    <meta http-equiv="content-type" content="text/html; charset=gb2312">
+  </head>
+<script language="javascript">
+	//定义一个变量用于存放XMLHttpRequest对象
+	var xmlHttp; 
+	
+	//该函数用于创建一个XMLHttpRequest对象
+	function createXMLHttpRequest() {
+		if (window.ActiveXObject) {
+			xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+		} 
+		else if (window.XMLHttpRequest) {
+			xmlHttp = new XMLHttpRequest();
+		}
+	}
+		
+	//这是一个启动AJAX异步通信的方法
+	function beginCheck(){
+		var tempLoginName = document.all.loginName.value;
+		if (tempLoginName == ""){//如果尚未输入注册名
+		 	alert("对不起，请您输入注册名!");
+		 	return;
+		}
+		//创建一个XMLHttpRequest对象
+		createXMLHttpRequest();
+		//将状态触发器绑定到一个函数
+		xmlHttp.onreadystatechange = processor;
+		//通过GET方法向指定的URL建立服务器的调用
+		xmlHttp.open("GET", "CheckUser?loginName="+tempLoginName);
+		//发送请求
+		xmlHttp.send(null);
+	}
+	
+	//这是响应省份列表的onChange事件的处理方法
+	function updateSelect(){
+		var selected = document.all.slt1.value;//得到省份列表的当前选值
+		//创建一个XMLHttpRequest对象
+		createXMLHttpRequest();
+		//将状态触发器绑定到一个函数
+		xmlHttp.onreadystatechange = processor1;
+		//通过GET方法向指定的URL建立服务器的调用
+		xmlHttp.open("GET", "CreateXML?selected="+selected);
+		//发送请求
+		xmlHttp.send(null);
+	}
+	
+	//处理从服务器返回的XML文档并更新地市下拉列表
+	function processor1() {
+		//定义一个变量用于存放从服务器返回的响应结果
+		var result;
+		if(xmlHttp.readyState == 4) { //如果响应完成
+			if(xmlHttp.status == 200) {//如果返回成功
+				//取出服务器返回的XML文档的所有city标签的子节点
+				result = xmlHttp.responseXML.getElementsByTagName("city");
+				//先清除地市列表的现有内容
+				while (document.all.slt2.options.length>0){
+					document.all.slt2.removeChild(document.all.slt2.childNodes[0]);
+				}
+				//解析XML中的数据并更新地市列表
+				for(var i=0;i<result.length;i++){
+					var option = document.createElement("OPTION");
+					option.text = result[i].childNodes[0].childNodes[0].nodeValue;//这就是取出<cityname>中的值
+					option.value = result[i].childNodes[1].childNodes[0].nodeValue;//这就是取出<cityvalue>中的值
+					document.all.slt2.options.add(option);//为地市列表中添加选项
+				}
+			}
+		}
+	}
+	
+	//这是一用来处理状态改变的函数
+	function processor () {
+		//定义一个变量用于存放从服务器返回的响应结果
+		var responseContext;
+		if(xmlHttp.readyState == 4) { //如果响应完成
+			if(xmlHttp.status == 200) {//如果返回成功
+				//取出服务器的响应内容
+				responseContext = xmlHttp.responseText;
+				//如果注册名检查有效
+				if (responseContext.indexOf("true")!=-1){
+					alert("恭喜您，该注册名有效！");
+				}else{
+					alert("对不起，该注册名已被使用！");
+				}
+			}
+		}
+	}
+</script>  
+  <body>
+    <form name="form1" action="CheckUser" method="POST">
+    	请输入注册用户名：
+    	<input name="loginName" type="text" id="loginName">
+    	<input type="button" name="checkLoginName" value="有效性检查" 
+    		   onclick="beginCheck()"><br>
+    	请选择省份：
+    	<select id="slt1" onChange="updateSelect()">
+    		<option value="1">湖南省</option>
+    		<option value="2">广东省</option>
+    	</select>
+    	地市：
+    	<select id="slt2">
+    		<option value="">请选择地市</option>
+    	</select>
+    </form>
+  </body>
+</html>
